@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>REST Countries</title>
+</head>
+<body>
+    
+    <div class="container">
+
+        <header class="header">
+            
+            <div class="logo">
+                <img class="world-logo logo-light-mode" src="img/worldwide.png" alt="world-logo">
+                <img class="world-logo logo-darkmode hidden" src="img/earth-globe-with-continents-maps.png" alt="wordl-logo-dark-mode">
+                <p class="country-app">Country App</p>
+            </div>
+
+            <div class="mode-switch">
+                <!-- Light Mode -->
+                <div class="light-mode">
+                    <img id="light-img" class="modepic light-img-mode" src="img/bulb.png" alt="Light mode icon">
+                    <p class="light fontsize">Light</p>
+                </div>
+            
+                <!-- Dark Mode -->
+                <div class="dark-mode hidden">
+                    <img id="dark-img" class="modepic plane-dark-mode" src="img/plane-mode.png" alt="Dark mode icon">
+                    <p class="dark fontsize">Dark</p>
+                </div>
+            </div>
+        
+        </header>
+        <div class="main">
+            <div class="search-bar-container">
+                <div class="search">
+                    <img src="img/loupe.png" alt="lupa" class="loupe"> 
+                    <input type="text" class="countries-input" placeholder="Search for a country...">
+                </div>
+                <div class="continent-selector">
+                    <select class="continent-dropdown">
+                        <option value="all">All</option>
+                        <option value="africa">Africa</option>
+                        <option value="asia">Asia</option>
+                        <option value="europe">Europe</option>
+                        <option value="americas">Americas</option>
+                        <option value="oceania">Oceania</option>
+                    </select>
+                </div>
+            </div>
+
+            <ul class="country-list">
+                <!--Lista zemalja koje ocitavam iz javascripta-->
+            </ul>
+        </div>
+        
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
+
