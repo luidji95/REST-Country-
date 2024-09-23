@@ -98,3 +98,35 @@ body {
 .fontsize {
     font-size: 25px;
 }
+
+
+
+
+
+.bright, .dark-mode {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.modepic {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.2s ease;
+}
+
+.modepic:hover {
+    transform: scale(1.1);
+}
+
+
+
+
+
+/* Dodaj promenu boje prilikom prelaska u tamni mod */
+.header.dark-mode-active {
+    background-color: #333;
+    transition: background-color 0.3s ease;
+}
