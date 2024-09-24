@@ -130,3 +130,42 @@ body {
     background-color: #333;
     transition: background-color 0.3s ease;
 }
+
+
+
+
+
+/* Postavi osnovni stil za main container */
+.search-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4ff; /* Blaga boja pozadine */
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Blaga senka */
+    margin-top: 20px;
+}
+
+/* Stil za search (pretragu) */
+.search {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loupe {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.countries-input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    width: 250px;
+}
