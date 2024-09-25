@@ -169,3 +169,133 @@ body {
     font-size: 16px;
     width: 250px;
 }
+
+/* Stil za dropdown */
+.continent-selector {
+    display: flex;
+    align-items: center;
+}
+
+.continent-dropdown {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    cursor: pointer;
+}
+
+
+/* Stil za ul listu */
+#country-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 20px; 
+    padding: 20px; 
+    list-style-type: none; 
+    margin: 0; 
+}
+
+/* Stil za svaki li element */
+.country-item {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
+    padding: 20px; 
+    transition: transform 0.3s ease; 
+}
+
+/* Stil za slike zastava */
+.country-item img {
+    width: 100%; 
+    height: auto;
+    border-radius: 8px; 
+    margin-bottom: 10px; 
+}
+
+/* Hover efekat za li elemente */
+.country-item:hover {
+    transform: translateY(-5px); 
+}
+
+/* Stil za tekst ispod zastave */
+.country-item span {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-bar {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.pagination-bar li {
+    margin: 0 5px;
+}
+
+.pagination-btn {
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.pagination-bar li a {
+    padding: 8px 12px;
+    text-decoration: none;
+    background-color: #f1f1f1;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination-bar li a.active {
+    background-color: #007BFF;
+    color: white;
+}
+
+.pagination-bar li a:hover {
+    background-color: #007BFF;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+ 
