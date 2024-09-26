@@ -32,3 +32,22 @@ darkImg.addEventListener('click', function() {
     header.classList.remove('color');
     h1.classList.remove('countryappcolor');
 });
+
+// Funkcija za chunkovanje niza
+function chunkArray(arr, size) {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+        chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+}
+
+class CountryManager {
+    constructor() {
+        this.Countries = [];  // Svi podaci o zemljama
+        this.filteredCountries = []; // Filtrirane zemlje na osnovu regiona ili pretrage
+        this.itemsPerPage = 20;  // Koliko zemalja po stranici
+        this.currentPage = 1;  // Trenutna stranica
+        this.totalPages = 0;  // Ukupan broj stranica
+    }
+}
