@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <title>REST Countries</title>
 </head>
-<body>
+<body class="body">
     
     <div class="container">
 
@@ -22,13 +22,13 @@
                 <!-- Light Mode -->
                 <div class="light-mode">
                     <img id="light-img" class="modepic light-img-mode" src="img/bulb.png" alt="Light mode icon">
-                    <p class="light fontsize">Light</p>
+                    <p class="light fontsize">Light mode</p>
                 </div>
             
                 <!-- Dark Mode -->
                 <div class="dark-mode hidden">
                     <img id="dark-img" class="modepic plane-dark-mode" src="img/plane-mode.png" alt="Dark mode icon">
-                    <p class="dark fontsize">Dark</p>
+                    <p class="dark fontsize">Dark mode</p>
                 </div>
             </div>
         
@@ -51,9 +51,31 @@
                 </div>
             </div>
 
-            <ul class="country-list">
-                <!--Lista zemalja koje ocitavam iz javascripta-->
-            </ul>
+        
+            
+           
+
+            <ul id="country-list" class="vis"></ul>
+
+           <div class="country-details-modal hidden">
+                <div class="modal-content">
+                    <!--Ovde ce se prikazati informacije o zemlji na koju smo kliknuli-->
+                </div>
+                <button class="close-modal">Close</button>
+           </div>
+
+
+
+
+            <!-- Paginacija -->
+            <div class="pagination-container" class="vis">
+                <button id="prevPage" class="pagination-btn">&lt;</button>
+                
+                <ul id="pagination" class="pagination-bar"></ul>
+                
+                <button id="nextPage" class="pagination-btn">&gt;</button>
+            </div>
+
         </div>
         
     </div>
@@ -61,4 +83,3 @@
     <script src="main.js"></script>
 </body>
 </html>
-
