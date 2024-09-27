@@ -51,3 +51,22 @@ class CountryManager {
         this.totalPages = 0;  // Ukupan broj stranica
     }
 }
+
+const countryManager = new CountryManager();
+
+// Funkcija za preuzimanje podataka
+async function fetchData(url) {
+    try {
+        let response = await fetch(url);  
+        let countries = await response.json();  
+        
+        countryManager.Countries = countries; 
+        countryManager.filteredCountries = countries;  // Inicijalno prikaži sve zemlje
+        countryManager.totalPages = Math.ceil(countries.length / countryManager.itemsPerPage);  // Izračunaj broj stranica
+    } catch (error) {
+        console.log('Greška prilikom preuzimanja podataka:', error);
+    }
+}
+
+// Poziv funkcije za preuzimanje podataka
+fetchData('https://restcountries.com/v3.1/all?fields=name,flags,region');
