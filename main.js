@@ -10,6 +10,10 @@ const header = document.querySelector('.body');
 const h1 = document.querySelector('.country-app');
 const countryList = document.getElementById('country-list');
 
+const detailsModal = document.querySelector('.country-details-modal');
+const closeModalBtn = document.querySelector('.close-modal');
+const modalContent = document.querySelector('.modal-content');
+
 // Klik na light mode ikonicu
 lightImg.addEventListener('click', function() {
     lightModeSwitch.classList.add('hidden');   
@@ -49,6 +53,28 @@ class CountryManager {
         this.itemsPerPage = 20;  // Koliko zemalja po stranici
         this.currentPage = 1;  // Trenutna stranica
         this.totalPages = 0;  // Ukupan broj stranica
+    }
+
+       // Funkcija za prikaz zemalja po stranici
+       displayCountries() {
+        const countryList = document.getElementById('country-list');
+        countryList.innerHTML = '';  
+
+        // Podeli niz filtriranih zemalja u chunk-ove
+        const paginatedCountries = chunkArray(this.filteredCountries, this.itemsPerPage);
+
+        // Prikaži zemlje samo sa trenutne stranice
+        const countriesToDisplay = paginatedCountries[this.currentPage - 1] || [];
+
+        countriesToDisplay.forEach(country => {
+            const li = document.createElement('li');
+            li.classList.add('country-item');
+            li.innerHTML = `
+                <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="50" class = "flag">
+                <span>${country.name.common}</span>
+            `;
+            countryList.appendChild(li);
+        });
     }
 }
 
