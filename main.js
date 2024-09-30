@@ -14,6 +14,7 @@ const detailsModal = document.querySelector('.country-details-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const modalContent = document.querySelector('.modal-content');
 
+
 // Klik na light mode ikonicu
 lightImg.addEventListener('click', function() {
     lightModeSwitch.classList.add('hidden');   
@@ -37,6 +38,8 @@ darkImg.addEventListener('click', function() {
     h1.classList.remove('countryappcolor');
 });
 
+
+
 // Funkcija za chunkovanje niza
 function chunkArray(arr, size) {
     const chunks = [];
@@ -55,8 +58,8 @@ class CountryManager {
         this.totalPages = 0;  // Ukupan broj stranica
     }
 
-       // Funkcija za prikaz zemalja po stranici
-       displayCountries() {
+    // Funkcija za prikaz zemalja po stranici
+    displayCountries() {
         const countryList = document.getElementById('country-list');
         countryList.innerHTML = '';  
 
@@ -75,6 +78,78 @@ class CountryManager {
             `;
             countryList.appendChild(li);
         });
+    }
+
+    // Kreiraj paginaciju
+    createPagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';  
+
+        for (let i = 1; i <= this.totalPages; i++) {
+            const pageItem = document.createElement('li');
+            const pageLink = document.createElement('a');
+            pageLink.textContent = i;
+            pageLink.href = "#";
+            pageLink.dataset.page = i;
+
+            if (i === this.currentPage) {
+                pageLink.classList.add('active');
+            }
+
+            pageLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.currentPage = parseInt(e.target.dataset.page);
+                this.updatePagination();
+            });
+
+            pageItem.appendChild(pageLink);
+            pagination.appendChild(pageItem);
+        }
+    }
+
+    // Ažuriraj paginaciju i prikaz zemalja
+    updatePagination() {
+        this.displayCountries();
+        this.createPagination();
+    }
+
+    // Filtriraj zemlje na osnovu regiona
+    filterByRegion(region) {
+        if (region === 'all') {
+            this.filteredCountries = this.Countries;
+        } else {
+            this.filteredCountries = this.Countries.filter(country => country.region.toLowerCase() === region.toLowerCase());
+        }
+        this.totalPages = Math.ceil(this.filteredCountries.length / this.itemsPerPage);
+        this.currentPage = 1;
+        this.updatePagination();
+    }
+
+    // Filtriraj zemlje na osnovu pretrage
+    filterBySearch(query) {
+        const lowercasedQuery = query.toLowerCase();
+        this.filteredCountries = this.Countries.filter(country => 
+            country.name.common.toLowerCase().includes(lowercasedQuery)
+        );
+        this.totalPages = Math.ceil(this.filteredCountries.length / this.itemsPerPage);
+        this.currentPage = 1;
+        this.updatePagination();
+    }
+
+
+    // Funkcija za prikaz detalja zemlje
+    showCountryDetails(country) {
+        modalContent.innerHTML = `
+            <h2>${country.name.official}</h2>
+            <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="100">
+            <p><strong>Capital:</strong> ${country.capital}</p>
+            <p><strong>Population:</strong> ${country.population}</p>
+            <p><strong>Region:</strong> ${country.region}</p>
+            <p><strong>Subregion:</strong> ${country.subregion}</p>
+            <p><strong>Currency:</strong> ${country.currencies}</p>
+            <p><strong>Languages:</strong> ${country.languages }</p>
+        `;
+        detailsModal.classList.add('visible');  // Pokaži modal sa informacijama
     }
 }
 
