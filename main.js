@@ -1,5 +1,6 @@
 import './style.css'
 
+
 const lightModeSwitch = document.querySelector('.light-mode');
 const darkModeSwitch = document.querySelector('.dark-mode');
 const lightImg = document.getElementById('light-img');
@@ -14,31 +15,27 @@ const detailsModal = document.querySelector('.country-details-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const modalContent = document.querySelector('.modal-content');
 
-
 // Klik na light mode ikonicu
 lightImg.addEventListener('click', function() {
-    lightModeSwitch.classList.add('hidden');   
-    darkModeSwitch.classList.remove('hidden'); 
-    darkModeSwitch.classList.add('visible');   
+    lightModeSwitch.classList.add('hidden');
+    darkModeSwitch.classList.remove('hidden');
+    darkModeSwitch.classList.add('visible');
     darkLogo.classList.remove('hidden');
     lightModeSwitch.classList.add('hidden');
     header.classList.add('color');
     h1.classList.add('countryappcolor');
-
 });
 
 // Klik na dark mode ikonicu
 darkImg.addEventListener('click', function() {
-    darkModeSwitch.classList.add('hidden');    
-    darkModeSwitch.classList.remove('visible'); 
-    lightModeSwitch.classList.remove('hidden'); 
+    darkModeSwitch.classList.add('hidden');
+    darkModeSwitch.classList.remove('visible');
+    lightModeSwitch.classList.remove('hidden');
     darkLogo.classList.add('hidden');
     lightLogo.classList.remove('hidden');
     header.classList.remove('color');
     h1.classList.remove('countryappcolor');
 });
-
-
 
 // Funkcija za chunkovanje niza
 function chunkArray(arr, size) {
@@ -61,19 +58,19 @@ class CountryManager {
     // Funkcija za prikaz zemalja po stranici
     displayCountries() {
         const countryList = document.getElementById('country-list');
-        countryList.innerHTML = '';  
+        countryList.innerHTML = '';
 
-        // Podeli niz filtriranih zemalja u chunk-ove
+        
         const paginatedCountries = chunkArray(this.filteredCountries, this.itemsPerPage);
 
-        // Prikaži zemlje samo sa trenutne stranice
+        
         const countriesToDisplay = paginatedCountries[this.currentPage - 1] || [];
 
         countriesToDisplay.forEach(country => {
             const li = document.createElement('li');
             li.classList.add('country-item');
             li.innerHTML = `
-                <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="50" class = "flag">
+                <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="50" class="flag">
                 <span>${country.name.common}</span>
             `;
             countryList.appendChild(li);
@@ -83,7 +80,7 @@ class CountryManager {
     // Kreiraj paginaciju
     createPagination() {
         const pagination = document.getElementById('pagination');
-        pagination.innerHTML = '';  
+        pagination.innerHTML = '';
 
         for (let i = 1; i <= this.totalPages; i++) {
             const pageItem = document.createElement('li');
@@ -115,42 +112,68 @@ class CountryManager {
 
     // Filtriraj zemlje na osnovu regiona
     filterByRegion(region) {
-        if (region === 'all') {
-            this.filteredCountries = this.Countries;
-        } else {
-            this.filteredCountries = this.Countries.filter(country => country.region.toLowerCase() === region.toLowerCase());
-        }
-        this.totalPages = Math.ceil(this.filteredCountries.length / this.itemsPerPage);
-        this.currentPage = 1;
-        this.updatePagination();
+        const url = region === 'all' ? 'https://restcountries.com/v3.1/all' :
+            `https://restcountries.com/v3.1/region/${region}`;
+        fetchData(url);
     }
 
     // Filtriraj zemlje na osnovu pretrage
     filterBySearch(query) {
-        const lowercasedQuery = query.toLowerCase();
-        this.filteredCountries = this.Countries.filter(country => 
-            country.name.common.toLowerCase().includes(lowercasedQuery)
-        );
-        this.totalPages = Math.ceil(this.filteredCountries.length / this.itemsPerPage);
-        this.currentPage = 1;
-        this.updatePagination();
+        if (query) {
+            const url = `https://restcountries.com/v3.1/name/${query}`;
+            fetchData(url);
+        } else {
+            fetchData('https://restcountries.com/v3.1/all'); // Ako je pretraga prazna, povuci sve zemlje
+        }
     }
 
+// Funkcija za prikaz detalja zemlje koristeći API
+async showCountryDetails(countryName) {
+    try {
+        // API poziv za dobijanje detalja o određenoj zemlji
+        const url = `https://restcountries.com/v3.1/name/${countryName}`;
+        const response = await fetch(url);
+        const countryData = await response.json();
 
-    // Funkcija za prikaz detalja zemlje
-    showCountryDetails(country) {
-        modalContent.innerHTML = `
-            <h2>${country.name.official}</h2>
-            <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="100">
-            <p><strong>Capital:</strong> ${country.capital}</p>
-            <p><strong>Population:</strong> ${country.population}</p>
-            <p><strong>Region:</strong> ${country.region}</p>
-            <p><strong>Subregion:</strong> ${country.subregion}</p>
-            <p><strong>Currency:</strong> ${country.currencies}</p>
-            <p><strong>Languages:</strong> ${country.languages }</p>
-        `;
-        detailsModal.classList.add('visible');  // Pokaži modal sa informacijama
+        
+
+        // Proveri da li je odgovor validan
+        if (countryData && countryData.length > 0) {
+            const country = countryData[0];  // Dobija prvu zemlju iz rezultata
+
+
+            // Izvlačenje podataka
+            const currencies = Object.values(country.currencies || {}).map(currency => currency.name).join(', ');
+            const languages = Object.values(country.languages || {}).join(', ');
+
+            // Ažuriraj prikaz sa detaljima zemlje
+            countryList.innerHTML = `
+                <div class="country-details">
+                    <h2>${country.name.official}</h2>
+                    <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="100">
+                    <p><strong>Continent:</strong> ${country.region}</p>
+                    <p><strong>Capital:</strong> ${country.capital ? country.capital.join(', ') : 'N/A'}</p>
+                    <p><strong>Area:</strong> ${country.area.toLocaleString()} km²</p>
+                    <p><strong>Population:</strong> ${country.population.toLocaleString()}</p>
+                    <p><strong>Currency:</strong> ${currencies || 'N/A'}</p>
+                    <p><strong>Languages:</strong> ${languages || 'N/A'}</p>
+                    <button id="go-back">Go Back</button>
+                </div>
+            `;
+
+            
+            // Dodaj event listener na dugme "Go Back"
+            document.getElementById('go-back').addEventListener('click', () => {
+                this.showAllCountries(); // Vraćanje na listu zemalja
+            });
+        } else {
+            console.error("Country data not found.");
+        }
+    } catch (error) {
+        console.error("Error fetching country data: ", error);
     }
+}
+
 }
 
 const countryManager = new CountryManager();
@@ -158,12 +181,13 @@ const countryManager = new CountryManager();
 // Funkcija za preuzimanje podataka
 async function fetchData(url) {
     try {
-        let response = await fetch(url);  
-        let countries = await response.json();  
-        
-        countryManager.Countries = countries; 
-        countryManager.filteredCountries = countries;  // Inicijalno prikaži sve zemlje
-        countryManager.totalPages = Math.ceil(countries.length / countryManager.itemsPerPage);  // Izračunaj broj stranica
+        let response = await fetch(url);
+        let countries = await response.json();
+
+        countryManager.Countries = countries;
+        countryManager.filteredCountries = countries;  
+        countryManager.totalPages = Math.ceil(countries.length / countryManager.itemsPerPage);  
+        countryManager.updatePagination();  
     } catch (error) {
         console.log('Greška prilikom preuzimanja podataka:', error);
     }
