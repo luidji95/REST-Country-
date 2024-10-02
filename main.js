@@ -1,5 +1,3 @@
-import './style.css'
-
 
 const lightModeSwitch = document.querySelector('.light-mode');
 const darkModeSwitch = document.querySelector('.dark-mode');
@@ -14,6 +12,7 @@ const countryList = document.getElementById('country-list');
 const detailsModal = document.querySelector('.country-details-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const modalContent = document.querySelector('.modal-content');
+const paginationContainer = document.querySelector('.pagination-container');
 
 // Klik na light mode ikonicu
 lightImg.addEventListener('click', function() {
@@ -140,7 +139,7 @@ async showCountryDetails(countryName) {
         // Proveri da li je odgovor validan
         if (countryData && countryData.length > 0) {
             const country = countryData[0];  // Dobija prvu zemlju iz rezultata
-
+            
 
             // Izvlačenje podataka
             const currencies = Object.values(country.currencies || {}).map(currency => currency.name).join(', ');
@@ -160,12 +159,8 @@ async showCountryDetails(countryName) {
                     <button id="go-back">Go Back</button>
                 </div>
             `;
-
             
-            // Dodaj event listener na dugme "Go Back"
-            document.getElementById('go-back').addEventListener('click', () => {
-                this.showAllCountries(); // Vraćanje na listu zemalja
-            });
+        
         } else {
             console.error("Country data not found.");
         }
@@ -195,3 +190,65 @@ async function fetchData(url) {
 
 // Poziv funkcije za preuzimanje podataka
 fetchData('https://restcountries.com/v3.1/all?fields=name,flags,region');
+
+// Event listener za prev i next dugmad
+document.getElementById('prevPage').addEventListener('click', () => {
+    if (countryManager.currentPage > 1) {
+        countryManager.currentPage--;
+        countryManager.updatePagination();
+    }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+    if (countryManager.currentPage < countryManager.totalPages) {
+        countryManager.currentPage++;
+        countryManager.updatePagination();
+    }
+});
+
+// Event listener za promenu regiona iz dropdown menija
+const regionDropdown = document.querySelector('.continent-dropdown');
+regionDropdown.addEventListener('change', (e) => {
+    const selectedRegion = e.target.value;
+    countryManager.filterByRegion(selectedRegion);
+});
+
+
+const searchBar = document.querySelector('.countries-input');
+searchBar.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        const countryName = event.target.value;
+        
+        if (countryName) {
+            countryManager.showCountryDetails(countryName);
+            
+        }
+    }
+});
+
+// Klik na dugme za zatvaranje modala
+closeModalBtn.addEventListener('click', function() {
+    detailsModal.classList.remove('visible');
+    countryList.classList.remove('hidden');
+});
+
+// Klik na zemlju iz liste
+countryList.addEventListener('click', function(event) {
+    if (event.target.classList.contains('flag')) {
+        const countryName = event.target.nextElementSibling.textContent; // Preuzmi ime zemlje
+        countryManager.showCountryDetails(countryName);  
+        paginationContainer.classList.add('hidden');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
