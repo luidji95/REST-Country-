@@ -1,5 +1,4 @@
 
-
 const lightModeSwitch = document.querySelector('.light-mode');
 const darkModeSwitch = document.querySelector('.dark-mode');
 const lightImg = document.getElementById('light-img');
@@ -37,6 +36,15 @@ darkImg.addEventListener('click', function() {
     h1.classList.remove('countryappcolor');
 });
 
+// Funkcija za chunkovanje niza
+function chunkArray(arr, size) {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+        chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+}
+
 class CountryManager {
     constructor() {
         this.Countries = [];  // Svi podaci o zemljama
@@ -46,22 +54,15 @@ class CountryManager {
         this.totalPages = 0;  // Ukupan broj stranica
     }
 
-    // Funkcija za chunkovanje niza (premesti je unutar klase)
-    chunkArray(arr, size) {
-        const chunks = [];
-        for (let i = 0; i < arr.length; i += size) {
-            chunks.push(arr.slice(i, i + size));
-        }
-        return chunks;
-    }
-
     // Funkcija za prikaz zemalja po stranici
     displayCountries() {
         const countryList = document.getElementById('country-list');
-        countryList.innerHTML = ''; // Očisti listu pre prikaza
+        countryList.innerHTML = '';
 
-        // Paginate filtered countries
-        const paginatedCountries = this.chunkArray(this.filteredCountries, this.itemsPerPage);
+        
+        const paginatedCountries = chunkArray(this.filteredCountries, this.itemsPerPage);
+
+        
         const countriesToDisplay = paginatedCountries[this.currentPage - 1] || [];
 
         countriesToDisplay.forEach(country => {
@@ -72,30 +73,6 @@ class CountryManager {
                 <span>${country.name.common}</span>
             `;
             countryList.appendChild(li);
-
-            // Event za klik na pojedinačnu zemlju
-            li.addEventListener('click', () => {
-                // Očisti listu i prikaži samo izabranu zemlju sa dodatnim podacima
-                countryList.innerHTML = '';
-
-                const detailedLi = document.createElement('li');
-                detailedLi.classList.add('country-item-details');
-                detailedLi.innerHTML = `
-                    <img src="${country.flags.png}" alt="Flag of ${country.name.common}" width="100" class="flag">
-                    <h2>${country.name.common}</h2>
-                    <p><strong>Population:</strong> ${country.population.toLocaleString()}</p>
-                    <p><strong>Region:</strong> ${country.region}</p>
-                    <p><strong>Capital:</strong> ${country.capital ? country.capital[0] : 'N/A'}</p>
-                    <button id="go-back-btn">Go Back</button>
-                `;
-                countryList.appendChild(detailedLi);
-
-                // Event za dugme "Go Back" koje vraća listu zemalja
-                const goBackBtn = document.getElementById('go-back-btn');
-                goBackBtn.addEventListener('click', () => {
-                    this.displayCountries();  // Ponovo prikaži sve zemlje
-                });
-            });
         });
     }
 
@@ -140,7 +117,7 @@ class CountryManager {
     }
 
     // Filtriraj zemlje na osnovu pretrage
-    filterBySearch(query) {
+    ClickSearchFilter(query) {
         if (query) {
             const url = `https://restcountries.com/v3.1/name/${query}`;
             fetchData(url);
@@ -149,16 +126,8 @@ class CountryManager {
         }
     }
 
-    filterByClick(query){
-        if(query){
-            const url = `https://restcountries.com/v3.1/name/${query}`; 
-            fetchData(url);
-        } else {
-            fetchData('https://restcountries.com/v3.1/all');
-        }
-    }
+    
 }
-
 
 const countryManager = new CountryManager();
 
@@ -209,35 +178,23 @@ searchBar.addEventListener('keydown', (event) => {
         const countryName = event.target.value;
         
         if (countryName) {
-            countryManager.filterBySearch(countryName);
+            countryManager.ClickSearchFilter(countryName);
             
         }
     }
 });
 
+// Klik na dugme za zatvaranje modala
+closeModalBtn.addEventListener('click', function() {
+    detailsModal.classList.remove('visible');
+    countryList.classList.remove('hidden');
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Klik na zemlju iz liste
+countryList.addEventListener('click', function(event) {
+    if (event.target.classList.contains('flag')) {
+        const countryName = event.target.nextElementSibling.textContent; // Preuzmi ime zemlje
+        countryManager.ClickSearchFilter(countryName);
+       
+    }
+});
