@@ -116,45 +116,61 @@ class CountryManager {
         fetchData(url);
     }
 
-    // Filtriraj zemlje na osnovu pretrage
-      ClickSearchFilter(query) {
-       
+    showCountryDetails(officialName,capital,population,area,languages,region,timezones) {
+        // Sakrij listu zemalja
+        document.getElementById('country-list').classList.add('hidden');
+        document.getElementById('country-details').classList.remove('hidden');
+    
+        // Prikaži detalje o zemlji
+        const countryInfo = document.getElementById('country-info');
+        countryInfo.innerHTML = `
+            <li><strong>Official Name:</strong> ${country.officialName}</li>
+            <li><strong>Capital:</strong> ${country.capital}</li>
+            <li><strong>Population:</strong> ${country.population}</li>
+            <li><strong>Area:</strong> ${country.area} km²</li>
+            <li><strong>Languages:</strong> ${country.languages}</li>
+            <li><strong>Region:</strong> ${country.region}</li>
+            <li><strong>Timezones:</strong> ${country.timezones}</li>
+        `;
+    }
+
+    
+    ClickSearchFilter(query) {
         fetch(`https://restcountries.com/v3.1/name/${query}`)
             .then(response => {
-                if(response.ok){
+                if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Zemlja nije pronadjena ili je doslo do greske');
+                    throw new Error('Zemlja nije pronađena ili je došlo do greške.');
                 }
             })
             .then(data => {
                 let country = data[0];
+                let officialName = country.name.official;
+                let capital = country.capital ? country.capital[0] : 'N/A';
+                let population = country.population;
+                let area = country.area;
+                let languages = Object.values(country.languages || {}).join(', ');
+                let region = country.region;
+                let timezones = country.timezones.join(', ');
 
-           // Ekstrakcija potrebnih podataka
-           let officialName = country.name.official;
-           let capital = country.capital ? country.capital[0] : 'N/A';
-           let population = country.population;
-           let area = country.area;
-           let languages = Object.values(country.languages || {}).join(', ');
-           let region = country.region;
-           let timezones = country.timezones.join(', ');
-
-           // Prikaz podataka u konzoli
-           console.log(`Zemlja: ${officialName}`);
-           console.log(`Glavni grad: ${capital}`);
-           console.log(`Populacija: ${population}`);
-           console.log(`Površina: ${area} km²`);
-           console.log(`Jezici: ${languages}`);
-           console.log(`Region: ${region}`);
-           console.log(`Vremenske zone: ${timezones}`);
-        })
-        .catch(error => {
-            console.log('Doslo je do greske', error.message);
-        })
+                // Prikaži podatke
+                this.showCountryDetails({
+                    officialName,
+                    capital,
+                    population,
+                    area,
+                    languages,
+                    region,
+                    timezones
+                });
+            })
+            .catch(error => {
+                console.log('Došlo je do greške:', error.message);
+            });
     }
-
-    
 }
+   
 
 const countryManager = new CountryManager();
 
