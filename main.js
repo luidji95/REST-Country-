@@ -118,15 +118,39 @@ class CountryManager {
 
     // Filtriraj zemlje na osnovu pretrage
       ClickSearchFilter(query) {
-        try{
-            let response = await fetch(`https://restcountries.com/v3.1/region/${query}`);
-            
-            if(response.ok){
-                const {name, id } = await response.json();
-                    
-                
-            }
-        }
+       
+        fetch(`https://restcountries.com/v3.1/name/${query}`)
+            .then(response => {
+                if(response.ok){
+                    return response.json();
+                } else {
+                    throw new Error('Zemlja nije pronadjena ili je doslo do greske');
+                }
+            })
+            .then(data => {
+                let country = data[0];
+
+           // Ekstrakcija potrebnih podataka
+           let officialName = country.name.official;
+           let capital = country.capital ? country.capital[0] : 'N/A';
+           let population = country.population;
+           let area = country.area;
+           let languages = Object.values(country.languages || {}).join(', ');
+           let region = country.region;
+           let timezones = country.timezones.join(', ');
+
+           // Prikaz podataka u konzoli
+           console.log(`Zemlja: ${officialName}`);
+           console.log(`Glavni grad: ${capital}`);
+           console.log(`Populacija: ${population}`);
+           console.log(`Površina: ${area} km²`);
+           console.log(`Jezici: ${languages}`);
+           console.log(`Region: ${region}`);
+           console.log(`Vremenske zone: ${timezones}`);
+        })
+        .catch(error => {
+            console.log('Doslo je do greske', error.message);
+        })
     }
 
     
