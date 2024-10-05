@@ -117,12 +117,15 @@ class CountryManager {
     }
 
     // Filtriraj zemlje na osnovu pretrage
-    ClickSearchFilter(query) {
-        if (query) {
-            const url = `https://restcountries.com/v3.1/name/${query}`;
-            fetchData(url);
-        } else {
-            fetchData('https://restcountries.com/v3.1/all'); // Ako je pretraga prazna, povuci sve zemlje
+      ClickSearchFilter(query) {
+        try{
+            let response = await fetch(`https://restcountries.com/v3.1/region/${query}`);
+            
+            if(response.ok){
+                const {name, id } = await response.json();
+                    
+                
+            }
         }
     }
 
