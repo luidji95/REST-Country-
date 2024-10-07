@@ -116,7 +116,7 @@ class CountryManager {
         fetchData(url);
     }
 
-    showCountryDetails(officialName,capital,population,area,languages,region,timezones) {
+    showCountryDetails({officialName, capital, population, area, languages, region, timezones}) {
         // Sakrij listu zemalja
         document.getElementById('country-list').classList.add('hidden');
         document.getElementById('country-details').classList.remove('hidden');
@@ -124,15 +124,18 @@ class CountryManager {
         // Prikaži detalje o zemlji
         const countryInfo = document.getElementById('country-info');
         countryInfo.innerHTML = `
-            <li><strong>Official Name:</strong> ${country.officialName}</li>
-            <li><strong>Capital:</strong> ${country.capital}</li>
-            <li><strong>Population:</strong> ${country.population}</li>
-            <li><strong>Area:</strong> ${country.area} km²</li>
-            <li><strong>Languages:</strong> ${country.languages}</li>
-            <li><strong>Region:</strong> ${country.region}</li>
-            <li><strong>Timezones:</strong> ${country.timezones}</li>
+            <li><strong>Official Name:</strong> ${officialName}</li>
+            <li><strong>Capital:</strong> ${capital}</li>
+            <li><strong>Population:</strong> ${population}</li>
+            <li><strong>Area:</strong> ${area} km²</li>
+            <li><strong>Languages:</strong> ${languages}</li>
+            <li><strong>Region:</strong> ${region}</li>
+            <li><strong>Timezones:</strong> ${timezones}</li>
         `;
+
+        
     }
+    
 
     
     ClickSearchFilter(query) {
@@ -164,6 +167,8 @@ class CountryManager {
                     region,
                     timezones
                 });
+
+                
             })
             .catch(error => {
                 console.log('Došlo je do greške:', error.message);
@@ -227,11 +232,7 @@ searchBar.addEventListener('keydown', (event) => {
     }
 });
 
-// Klik na dugme za zatvaranje modala
-closeModalBtn.addEventListener('click', function() {
-    detailsModal.classList.remove('visible');
-    countryList.classList.remove('hidden');
-});
+
 
 // Klik na zemlju iz liste
 countryList.addEventListener('click', function(event) {
