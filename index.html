@@ -7,36 +7,31 @@
     <title>REST Countries</title>
 </head>
 <body class="body">
-    
     <div class="container">
 
         <header class="header">
-            
             <div class="logo">
                 <img class="world-logo logo-light-mode" src="img/worldwide.png" alt="world-logo">
-                <img class="world-logo logo-darkmode hidden" src="img/earth-globe-with-continents-maps.png" alt="wordl-logo-dark-mode">
+                <img class="world-logo logo-darkmode hidden" src="img/earth-globe-with-continents-maps.png" alt="world-logo-dark-mode">
                 <p class="country-app">Country App</p>
             </div>
 
             <div class="mode-switch">
-                <!-- Light Mode -->
                 <div class="light-mode">
                     <img id="light-img" class="modepic light-img-mode" src="img/bulb.png" alt="Light mode icon">
                     <p class="light fontsize">Light mode</p>
                 </div>
-            
-                <!-- Dark Mode -->
                 <div class="dark-mode hidden">
                     <img id="dark-img" class="modepic plane-dark-mode" src="img/plane-mode.png" alt="Dark mode icon">
                     <p class="dark fontsize">Dark mode</p>
                 </div>
             </div>
-        
         </header>
+
         <div class="main">
             <div class="search-bar-container">
                 <div class="search">
-                    <img src="img/loupe.png" alt="lupa" class="loupe"> 
+                    <img src="img/loupe.png" alt="loupe" class="loupe"> 
                     <input type="text" class="countries-input" placeholder="Search for a country...">
                 </div>
                 <div class="continent-selector">
@@ -51,41 +46,22 @@
                 </div>
             </div>
 
-        
-        
             <ul id="country-list" class="vis"></ul>
 
-           <div class="country-details-modal hidden">
+            <div id="countryModal" class="modal">
                 <div class="modal-content">
-                    <!--Ovde ce se prikazati informacije o zemlji na koju smo kliknuli-->
+                    <span class="close-modal">&times;</span>
+                    <ul id="country-info"></ul>
                 </div>
-                <button class="close-modal">Close</button>
-           </div>
-
-
-            <!-- Paginacija -->
-            <div class="pagination-container" class="vis">
-                <button id="prevPage" class="pagination-btn">&lt;</button>
-                
-                <ul id="pagination" class="pagination-bar"></ul>
-                
-                <button id="nextPage" class="pagination-btn">&gt;</button>
             </div>
 
-            <div class="country-list">
-                <ul id="country-list"></ul>
-              </div>
-              
-              <div class="country-details hidden" id="country-details">
-                <button id="go-back-btn">Go Back</button>
-                <ul id="country-info"></ul>
-              </div>
-              
-
+            <div class="pagination-container vis">
+                <button id="prevPage" class="pagination-btn">&lt;</button>
+                <ul id="pagination" class="pagination-bar"></ul>
+                <button id="nextPage" class="pagination-btn">&gt;</button>
+            </div>
         </div>
-        
     </div>
-
     <script src="main.js"></script>
 </body>
 </html>

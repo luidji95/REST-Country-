@@ -9,10 +9,17 @@ const header = document.querySelector('.body');
 const h1 = document.querySelector('.country-app');
 const countryList = document.getElementById('country-list');
 
-const detailsModal = document.querySelector('.country-details-modal');
-const closeModalBtn = document.querySelector('.close-modal');
+
 const modalContent = document.querySelector('.modal-content');
 const paginationContainer = document.querySelector('.pagination-container');
+
+
+const modal = document.getElementById('countryModal'); // ili kako god da se zove tvoj modal
+const countryInfo = document.getElementById('country-info'); // ili kako god da se zove tvoj element za prikaz informacija
+const closeModalBtn = document.querySelector('.close-modal'); // ili kako god da se zove tvoj dugme za zatvaranje
+
+
+
 
 // Klik na light mode ikonicu
 lightImg.addEventListener('click', function() {
@@ -116,14 +123,15 @@ class CountryManager {
         fetchData(url);
     }
 
-    showCountryDetails({officialName, capital, population, area, languages, region, timezones}) {
-        // Sakrij listu zemalja
-        document.getElementById('country-list').classList.add('hidden');
-        document.getElementById('country-details').classList.remove('hidden');
+  
+    showCountryDetails({flag, officialName, capital, population, area, languages, region, timezones}){
+
+        // Prikaži modalni prozor
+        modal.style.display = 'block';
     
-        // Prikaži detalje o zemlji
-        const countryInfo = document.getElementById('country-info');
+        // Popuni sadržaj modala sa detaljima o zemlji
         countryInfo.innerHTML = `
+            <li><img src="${flag}" alt="Flag of ${officialName}" class="fflag" style="width:100px;"></li>
             <li><strong>Official Name:</strong> ${officialName}</li>
             <li><strong>Capital:</strong> ${capital}</li>
             <li><strong>Population:</strong> ${population}</li>
@@ -132,11 +140,23 @@ class CountryManager {
             <li><strong>Region:</strong> ${region}</li>
             <li><strong>Timezones:</strong> ${timezones}</li>
         `;
-
-        
+    
+        // Zatvori modal na klik dugmeta za zatvaranje
+        closeModalBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    
+        // Zatvori modal ako korisnik klikne van prozora
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
     }
     
 
+   
+    
     
     ClickSearchFilter(query) {
         fetch(`https://restcountries.com/v3.1/name/${query}`)
@@ -149,7 +169,9 @@ class CountryManager {
             })
             .then(data => {
                 let country = data[0];
+                let flag = country.flags.png;
                 let officialName = country.name.official;
+                // const { country : {name : { officialName }}} = data;
                 let capital = country.capital ? country.capital[0] : 'N/A';
                 let population = country.population;
                 let area = country.area;
@@ -157,8 +179,11 @@ class CountryManager {
                 let region = country.region;
                 let timezones = country.timezones.join(', ');
 
+                
+
                 // Prikaži podatke
                 this.showCountryDetails({
+                    flag,
                     officialName,
                     capital,
                     population,
@@ -168,12 +193,13 @@ class CountryManager {
                     timezones
                 });
 
-                
             })
             .catch(error => {
                 console.log('Došlo je do greške:', error.message);
             });
     }
+    
+   
 }
    
 
